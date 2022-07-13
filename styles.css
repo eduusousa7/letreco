@@ -16,7 +16,7 @@
     color: #943e3c;
 }
 
-.app-container {;
+.app-container {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
@@ -47,7 +47,8 @@
 }
 
 .typing {
-    border: 3px solid #252525;
+    border: 0.5px solid #252525;
+    box-shadow: 0 0 0 2px #252525 inset;
 }
 
 .disabled {
@@ -87,11 +88,14 @@
 }
 
 .keyboard-row-container:not(.notAlphabetic) button {
-    width: 8%;
+    width: 1.7rem;
     height: 40px;
     border-radius: 0.25rem;
     margin-right: 0.25rem;
     border: 1px solid #252525;
     font-size: 16px;
     cursor: pointer;
+}
+.keyboard-row-container:not(.notAlphabetic) button:disabled{
+    border: 1px solid #a19d9d;
 }

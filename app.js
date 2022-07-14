@@ -8,16 +8,13 @@ const keysFirstRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
 const keysSecondRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
 const keysThirdRow = ["Z", "X", "C", "V", "B", "N", "M"];
 
-let letrecoMap = {};
 let sort = Math.floor(Math.random() * letreco.length);
 const rows = 6;
 const columns = letreco[sort].length;
 let currentRow = 0;
 let currentColumn = 0;
+let letrecoMap = Object.entries(letreco[sort]).map((item) => item[1]);
 
-for (let index = 0; index < letreco[sort].length; index++) {
-  letrecoMap[letreco[sort][index]] = index;
-}
 const guesses = [];
 for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
   guesses[rowIndex] = new Array(columns);
@@ -62,25 +59,34 @@ function removeClass(id, classe) {
   }
   elemento.className = classes.join(" ");
 }
+
 const checkGuess = () => {
   enableKeyboard();
   const guess = guesses[currentRow].join("");
+  const sequence = Object.entries(guesses[currentRow].join("")).map(
+    (item) => item[1]
+  );
   let usedWord = [];
-  let verify = [];
   if (guess.length !== columns) return;
   var currentColumns = document.querySelectorAll(".typing");
   for (let index = 0; index < columns; index++) {
-    const letter = guess[index];
-    if (letrecoMap[letter] === undefined)
-      usedWord.push({ letter, state: "wrong" });
+    const letter = sequence[index];
+    const item = letrecoMap[index];
+    if (!letrecoMap.includes(letter)) usedWord.push({ letter, state: "wrong" });
     else {
-      letrecoMap[letter] === index
-        ? usedWord.push({ letter, state: "right" })
-        : verify.includes(letter)
-        ? usedWord.push({ letter, state: "wrong" })
-        : usedWord.push({ letter, state: "displaced" });
+      if (item === letter) usedWord.push({ letter, state: "right" });
+      else {
+        if (
+          item !== letter &&
+          !usedWord.includes(letter) &&
+          usedWord
+            .filter((item) => item.letter == letter)
+            .map((item) => item.state).length === 0
+        )
+          usedWord.push({ letter, state: "displaced" });
+        else usedWord.push({ letter, state: "wrong" });
+      }
     }
-    verify.push(letter);
     if (verifyExist(guess)) {
       usedWord.forEach((columns, index) => {
         currentColumns[index].classList.remove("notExist");

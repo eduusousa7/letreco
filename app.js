@@ -211,12 +211,12 @@ enterButton.textContent = "ENTER";
 backspaceAndEnterRow.append(enterButton);
 
 document.onkeydown = function (evt) {
-  evt = evt || window.evt;
-  if (evt.key === "Enter") {
-    checkGuess();
-  } else if (evt.key === "Backspace") {
-    handleBackspace();
-  } else {
-    handleKeyboardOnClick(evt.key.toUpperCase());
-  }
+    evt = evt || window.evt
+    if(evt.key === "Enter"){
+        checkGuess();
+    } else if (evt.key === "Backspace") {
+        handleBackspace()
+    } else if (/^[a-z]$/i.test(evt.key)) {
+        handleKeyboardOnClick(evt.key.toUpperCase())
+    }
 };

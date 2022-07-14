@@ -36,6 +36,11 @@ for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
   }
   tiles.append(tileRow);
 }
+function verifyExist(verifyLatter) {
+  return letreco
+    .filter((latter) => latter.length == columns)
+    .includes(verifyLatter);
+}
 function addClass(id, classe) {
   var elemento = document.getElementById(id);
   var classes = elemento.className.split(" ");
@@ -76,18 +81,27 @@ const checkGuess = () => {
         : usedWord.push({ letter, state: "displaced" });
     }
     verify.push(letter);
-    usedWord.forEach((columns, index) => {
-      currentColumns[index].classList.add(columns.state);
-      addClass(guess[index], columns.state);
-    });
+    if (verifyExist(guess)) {
+      usedWord.forEach((columns, index) => {
+        currentColumns[index].classList.remove("notExist");
+        currentColumns[index].classList.add(columns.state);
+        addClass(guess[index], columns.state);
+      });
+    } else {
+      usedWord.forEach((columns, index) => {
+        currentColumns[index].classList.add("notExist");
+      });
+    }
   }
-  if (guess === letreco[sort]) {
-    disableKeyboard();
-    disableActionButton();
-    window.alert("tu é demais, simplesmente o detetivao do entreterimento!");
-    return;
-  }
-  {
+  if (!verifyExist(guess)) return;
+  else {
+    if (guess === letreco[sort]) {
+      disableKeyboard();
+      disableActionButton();
+      window.alert("tu é demais, simplesmente o detetivao do entreterimento!");
+      return;
+    }
+
     if (currentRow === rows - 1) {
       disableKeyboard();
       disableActionButton();

@@ -93,8 +93,7 @@ const checkGuess = () => {
       });
     }
   }
-  if (!verifyExist(guess)) return;
-  else {
+  if (verifyExist(guess)) {
     if (guess === letreco[sort]) {
       disableKeyboard();
       disableActionButton();
@@ -116,6 +115,7 @@ const moveToNextRow = () => {
   var typingColumns = document.querySelectorAll(".typing");
   for (let index = 0; index < typingColumns.length; index++) {
     typingColumns[index].classList.remove("typing");
+    typingColumns[index].classList.remove("notExist");
     typingColumns[index].classList.add("disabled");
   }
   currentRow++;
@@ -181,6 +181,7 @@ const handleBackspace = () => {
   if (currentColumn === 0) {
     return;
   }
+
   enableKeyboard();
   currentColumn--;
   guesses[currentRow][currentColumn] = "";
@@ -188,6 +189,7 @@ const handleBackspace = () => {
     "#row" + currentRow + "column" + currentColumn
   );
   tile.textContent = "";
+  tile.classList.remove("notExist");
 };
 
 const backspaceButton = document.createElement("button");

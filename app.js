@@ -36,6 +36,11 @@ for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
   }
   tiles.append(tileRow);
 }
+function verifyExist(verifyLatter) {
+  return letreco
+    .filter((latter) => latter.length == columns)
+    .includes(verifyLatter);
+}
 function addClass(id, classe) {
   var elemento = document.getElementById(id);
   var classes = elemento.className.split(" ");
@@ -60,31 +65,45 @@ function removeClass(id, classe) {
 const checkGuess = () => {
   enableKeyboard();
   const guess = guesses[currentRow].join("");
+  let usedWord = [];
+  let verify = [];
   if (guess.length !== columns) return;
   var currentColumns = document.querySelectorAll(".typing");
   for (let index = 0; index < columns; index++) {
     const letter = guess[index];
-    if (letrecoMap[letter] === undefined) {
-      currentColumns[index].classList.add("wrong");
-      addClass(guess[index], "wrong");
+    if (letrecoMap[letter] === undefined)
+      usedWord.push({ letter, state: "wrong" });
+    else {
+      letrecoMap[letter] === index
+        ? usedWord.push({ letter, state: "right" })
+        : verify.includes(letter)
+        ? usedWord.push({ letter, state: "wrong" })
+        : usedWord.push({ letter, state: "displaced" });
+    }
+    verify.push(letter);
+    if (verifyExist(guess)) {
+      usedWord.forEach((columns, index) => {
+        currentColumns[index].classList.remove("notExist");
+        currentColumns[index].classList.add(columns.state);
+        addClass(guess[index], columns.state);
+      });
     } else {
-      if (letrecoMap[letter] === index) {
-        currentColumns[index].classList.add("right");
-        addClass(guess[index], "right");
-      } else {
-        currentColumns[index].classList.add("displaced");
-        addClass(guess[index], "displaced");
-      }
+      usedWord.forEach((columns, index) => {
+        currentColumns[index].classList.add("notExist");
+      });
     }
   }
-  if (guess === letreco[sort]) {
-    window.alert("tu é demais, simplesmente o detetivao do entreterimento!");
-    disableKeyboard();
-    disableActionButton();
-    return;
-  }
-  {
+  if (verifyExist(guess)) {
+    if (guess === letreco[sort]) {
+      disableKeyboard();
+      disableActionButton();
+      window.alert("tu é demais, simplesmente o detetivao do entreterimento!");
+      return;
+    }
+
     if (currentRow === rows - 1) {
+      disableKeyboard();
+      disableActionButton();
       window.alert("Errrrrrou!");
     } else {
       moveToNextRow();
@@ -96,6 +115,7 @@ const moveToNextRow = () => {
   var typingColumns = document.querySelectorAll(".typing");
   for (let index = 0; index < typingColumns.length; index++) {
     typingColumns[index].classList.remove("typing");
+    typingColumns[index].classList.remove("notExist");
     typingColumns[index].classList.add("disabled");
   }
   currentRow++;
@@ -161,6 +181,7 @@ const handleBackspace = () => {
   if (currentColumn === 0) {
     return;
   }
+
   enableKeyboard();
   currentColumn--;
   guesses[currentRow][currentColumn] = "";
@@ -168,6 +189,7 @@ const handleBackspace = () => {
     "#row" + currentRow + "column" + currentColumn
   );
   tile.textContent = "";
+  tile.classList.remove("notExist");
 };
 
 const backspaceButton = document.createElement("button");

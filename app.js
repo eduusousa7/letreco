@@ -60,22 +60,26 @@ function removeClass(id, classe) {
 const checkGuess = () => {
   enableKeyboard();
   const guess = guesses[currentRow].join("");
+  let usedWord = [];
+  let verify = [];
   if (guess.length !== columns) return;
   var currentColumns = document.querySelectorAll(".typing");
   for (let index = 0; index < columns; index++) {
     const letter = guess[index];
-    if (letrecoMap[letter] === undefined) {
-      currentColumns[index].classList.add("wrong");
-      addClass(guess[index], "wrong");
-    } else {
-      if (letrecoMap[letter] === index) {
-        currentColumns[index].classList.add("right");
-        addClass(guess[index], "right");
-      } else {
-        currentColumns[index].classList.add("displaced");
-        addClass(guess[index], "displaced");
-      }
+    if (letrecoMap[letter] === undefined)
+      usedWord.push({ letter, state: "wrong" });
+    else {
+      letrecoMap[letter] === index
+        ? usedWord.push({ letter, state: "right" })
+        : verify.includes(letter)
+        ? usedWord.push({ letter, state: "wrong" })
+        : usedWord.push({ letter, state: "displaced" });
     }
+    verify.push(letter);
+    usedWord.forEach((columns, index) => {
+      currentColumns[index].classList.add(columns.state);
+      addClass(guess[index], columns.state);
+    });
   }
   if (guess === letreco[sort]) {
     window.alert("tu é demais, simplesmente o detetivao do entreterimento!");

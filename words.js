@@ -12,4 +12,6 @@ const letreco = [
   "OMEGA",
   "PERLA",
   "VIENA",
+  "CARRO",
+  "ANDAR",
 ];

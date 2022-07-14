@@ -50,7 +50,10 @@
     border: 0.5px solid #252525;
     box-shadow: 0 0 0 2px #252525 inset;
 }
-
+.notExist{
+    border: 0.5px solid #df4040 !important;
+    box-shadow: 0 0 0 2px #df4040 inset !important;
+}
 .disabled {
     border: 1px solid #252525;
 }

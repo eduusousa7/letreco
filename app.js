@@ -82,13 +82,15 @@ const checkGuess = () => {
     });
   }
   if (guess === letreco[sort]) {
-    window.alert("tu é demais, simplesmente o detetivao do entreterimento!");
     disableKeyboard();
     disableActionButton();
+    window.alert("tu é demais, simplesmente o detetivao do entreterimento!");
     return;
   }
   {
     if (currentRow === rows - 1) {
+      disableKeyboard();
+      disableActionButton();
       window.alert("Errrrrrou!");
     } else {
       moveToNextRow();
